@@ -104,6 +104,9 @@ $font-family: Arial, Helvetica, sans-serif;
     @extend .header;
     .delivery {
       @extend .header;
+      span:first-of-type {
+        margin-left: 5px;
+      }
     }
   }
 }
