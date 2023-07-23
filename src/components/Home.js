@@ -2,9 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Home = () => (
-  <Link to="/vendors" className="link">
-    Vendors
-  </Link>
+  <div className="container">
+    <Link to="/vendors" className="link">
+      Vendors
+    </Link>
+  </div>
 );
 
 export default Home;

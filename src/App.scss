@@ -1,28 +1,109 @@
 $background-color: #282c34;
 $primary-color: #ff00a4;
+$shadow-color: rgba(0, 0, 0, 0.2);
+$font-family: Arial, Helvetica, sans-serif;
 
-.App {
-  background-color: $background-color;
-  min-height: 100vh;
+.__container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 2em;
-  color: white;
+}
+
+.__cover-img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.App {
+  background-color: $background-color;
+  min-height: 100vh;
+  direction: rtl;
+  font-family: $font-family;
+}
+
+.container {
+  min-height: 100vh;
+  @extend .__container;
 }
 
 .link {
+  font-size: 2em;
   text-decoration: none;
   border: 1px solid $primary-color;
   border-radius: 10px;
   padding: 15px 30px;
   color: white;
   background-color: $primary-color;
-  transition: all .3s ease-in-out;
-  &:hover{
+  transition: all 0.3s ease-in-out;
+  &:hover {
     color: $primary-color;
     background-color: white;
     border-color: white;
+  }
+}
+
+.card-container {
+  width: 100%;
+  margin-top: 50px;
+  @extend .__container;
+}
+
+.card {
+  width: calc(100% - 60px);
+  max-width: 500px;
+  margin: 20px 30px;
+  height: 300px;
+  background-color: white;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover {
+  width: 100%;
+  height: 50%;
+  position: absolute;
+  top: 0;
+  img {
+    @extend .__cover-img;
+  }
+}
+
+.logo {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  right: 10px;
+  bottom: 43%;
+  border-radius: 6px;
+  box-shadow: 0 3px 5px $shadow-color;
+  overflow: hidden;
+  img {
+    @extend .__cover-img;
+  }
+}
+
+.card-body {
+  width: calc(100% - 30px);
+  height: calc(50% - 55px);
+  padding: 40px 15px 15px;
+  opacity: 50%;
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .footer {
+    @extend .header;
+    .delivery {
+      @extend .header;
+    }
   }
 }
