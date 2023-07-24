@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 
 const UiVirtualScroll = ({
   offset = 0,
-  buffer,
+  // buffer,
   limit,
   rowHeight,
   height,
@@ -17,7 +17,8 @@ const UiVirtualScroll = ({
   // initial upper boundary index is 0
   const [upperBoundary, setUpperBoundary] = useState(offset);
   // initial lower boundary index is 300-1 = 299
-  const [lowerBoundary, setLowerBoundary] = useState(buffer - 1);
+  const [lowerBoundary, setLowerBoundary] = useState(limit - 1);
+  const [currentPage, setCurrentPage] = useState(offset);
   const [isLoading, setIsLoading] = useState(false);
   // current scroll position starting with 0
   const [currentScrollTopPosition, setCurrentScrollTopPosition] = useState(0);
@@ -56,18 +57,15 @@ const UiVirtualScroll = ({
     } else if (!isUp && scrollTop + clientHeight >= scrollHeight) {
       setIsLoading(true);
 
-      onNextCallback(lowerBoundary).then(() => {
-        // update boundaries to move indices + limit
-        setUpperBoundary(upperBoundary + limit);
-        setLowerBoundary(lowerBoundary + limit);
+      onNextCallback(currentPage + 1);
+      setCurrentPage(currentPage + 1);
 
-        if (overlayRef !== null) {
-          const scrollPos = limit * rowHeight;
-          // move scroll position to 2 limits height
-          overlayRef.current.scrollTo(0, scrollPos * 2);
-        }
-        setIsLoading(false);
-      });
+      if (overlayRef !== null) {
+        const scrollPos = limit * rowHeight;
+        // move scroll position to 2 limits height
+        overlayRef.current.scrollTo(0, scrollPos * 2);
+      }
+      setIsLoading(false);
     }
     // update the current cursor position
     setCurrentScrollTopPosition(scrollTop);

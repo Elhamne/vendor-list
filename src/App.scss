@@ -1,6 +1,10 @@
-$background-color: #282c34;
+$dark-color: #282c34;
+$gray-color: #a5a5a5;
 $primary-color: #ff00a4;
+$light-color: #fff;
 $shadow-color: rgba(0, 0, 0, 0.2);
+$star-color: #305d02;
+$background-green-color: rgba(63, 126, 0, 0.08);
 $font-family: Arial, Helvetica, sans-serif;
 
 .__container {
@@ -17,10 +21,11 @@ $font-family: Arial, Helvetica, sans-serif;
 }
 
 .App {
-  background-color: $background-color;
+  background-color: $dark-color;
   min-height: 100vh;
   direction: rtl;
   font-family: $font-family;
+  color: $dark-color;
 }
 
 .container {
@@ -29,18 +34,23 @@ $font-family: Arial, Helvetica, sans-serif;
 }
 
 .link {
-  font-size: 2em;
   text-decoration: none;
+  color: $light-color;
+  border-bottom: 1px solid $light-color;
+}
+
+.buttonLink {
+  @extend .link;
+  font-size: 2em;
   border: 1px solid $primary-color;
   border-radius: 10px;
   padding: 15px 30px;
-  color: white;
   background-color: $primary-color;
   transition: all 0.3s ease-in-out;
   &:hover {
     color: $primary-color;
-    background-color: white;
-    border-color: white;
+    background-color: $light-color;
+    border-color: $light-color;
   }
 }
 
@@ -55,7 +65,7 @@ $font-family: Arial, Helvetica, sans-serif;
   max-width: 500px;
   margin: 20px 30px;
   height: 300px;
-  background-color: white;
+  background-color: $light-color;
   border-radius: 6px;
   position: relative;
   overflow: hidden;
@@ -89,7 +99,7 @@ $font-family: Arial, Helvetica, sans-serif;
   width: calc(100% - 30px);
   height: calc(50% - 55px);
   padding: 40px 15px 15px;
-  opacity: 50%;
+  font-size: .9em;
   position: absolute;
   bottom: 0;
   display: flex;
@@ -99,6 +109,21 @@ $font-family: Arial, Helvetica, sans-serif;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    .title {
+      font-size: 1.1em;
+      font-weight: bold;
+    }
+    .rate {
+      direction: ltr;
+      color: $gray-color;
+      span:first-of-type {
+        margin-right: 5px;
+        color: $star-color;
+        background-color: $background-green-color;
+        padding: 2px;
+        border-radius: 4px;
+      }
+    }
   }
   .footer {
     @extend .header;
@@ -106,7 +131,13 @@ $font-family: Arial, Helvetica, sans-serif;
       @extend .header;
       span:first-of-type {
         margin-left: 5px;
+        color: $gray-color;
       }
     }
+  }
+  .desc {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 }

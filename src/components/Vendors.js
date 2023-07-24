@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { fetchVendors } from '../action/vendorAction';
 import UiVirtualScroll from './UiVirtualScroll';
 
 const Vendors = () => {
   const dispatch = useDispatch();
-  const buffer = 10 * 3;
-  const cache = buffer - 10;
+  // const buffer = 10 * 3;
   const expressDelivery = 'ارسال اکسپرس';
   const sellerDelivery = 'پیک فروشنده';
 
@@ -17,18 +18,26 @@ const Vendors = () => {
 
   const vendors = useSelector((state) => state.vendors);
   const loading = useSelector((state) => state.loading);
+  const success = useSelector((state) => state.success);
 
   useEffect(() => {
     setIsLoading(loading);
-    if (vendors) {
-      setVendorsList(vendors.filter((vendor) => vendor.type === 'VENDOR'));
+    if (vendors && success) {
+      const newVendors = [
+        ...vendorsList,
+        vendors.filter((vendor) => vendor.type === 'VENDOR'),
+      ];
+      setVendorsList(newVendors.flat());
+      // setVendorsList(vendors.filter((vendor) => vendor.type === 'VENDOR'));
     }
-  }, [vendors, loading]);
+    console.log('effect call');
+  }, [vendors, loading, success]);
 
   useEffect(() => {
     dispatch(fetchVendors(offset));
-  }, [dispatch]);
+  }, []);
 
+  console.log(vendors, success, loading);
   const prevCallback = (newOffset) => {
     dispatch(fetchVendors(newOffset));
   };
@@ -39,12 +48,13 @@ const Vendors = () => {
 
   return (
     <>
-      <Link to="/">Back to home</Link>
+      <Link to="/" className="link">
+        Back to home
+      </Link>
 
       <UiVirtualScroll
-        buffer={buffer}
         rowHeight={300}
-        height="100vh"
+        height="95vh"
         limit={10}
         onPrevCallback={prevCallback}
         onNextCallback={nextCallback}
@@ -66,7 +76,11 @@ const Vendors = () => {
                     <div className="header">
                       <div className="title">{vendor.data.title}</div>
                       <div className="rate">
-                        {vendor.data.rate} {vendor.data.voteCount}
+                        <span>
+                          <FontAwesomeIcon icon={faStar} />
+                          {vendor.data.rate}
+                        </span>
+                        <span>({vendor.data.voteCount})</span>
                       </div>
                     </div>
                     <div className="desc">{vendor.data.description}</div>
@@ -77,7 +91,10 @@ const Vendors = () => {
                             ? expressDelivery
                             : sellerDelivery}
                         </span>
-                        <span>{vendor.data.deliveryFee} تومان</span>
+                        <span>
+                          {parseInt(vendor.data.deliveryFee).toLocaleString()}{' '}
+                          تومان
+                        </span>
                       </div>
                       {vendor.data.max_eta !== -1 ? (
                         <div className="time">
