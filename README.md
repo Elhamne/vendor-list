@@ -1,3 +1,10 @@
+# TODOs
+- [x] Add route
+- [x] Implement vendor card design
+- [x] Setup redux and api call
+- [x] Fetch data to the vendor card
+- [] Implement scrolling pagination using virtual list
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
