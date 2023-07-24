@@ -6,7 +6,7 @@ const UiVirtualScroll = ({
   limit,
   rowHeight,
   height,
-  onPrevCallback,
+  // onPrevCallback,
   onNextCallback,
   children,
 }) => {
@@ -15,9 +15,9 @@ const UiVirtualScroll = ({
 
   // create two cursors of lower and upper boundary of cached items indices
   // initial upper boundary index is 0
-  const [upperBoundary, setUpperBoundary] = useState(offset);
+  // const [upperBoundary, setUpperBoundary] = useState(offset);
   // initial lower boundary index is 300-1 = 299
-  const [lowerBoundary, setLowerBoundary] = useState(limit - 1);
+  // const [lowerBoundary, setLowerBoundary] = useState(limit - 1);
   const [currentPage, setCurrentPage] = useState(offset);
   const [isLoading, setIsLoading] = useState(false);
   // current scroll position starting with 0
@@ -39,22 +39,23 @@ const UiVirtualScroll = ({
     // defining if we currently scrolling up or down
     const isUp = scrollTop < currentScrollTopPosition;
 
-    if (isUp && scrollTop === 0) {
-      setIsLoading(true);
+    // if (isUp && scrollTop === 0) {
+    //   setIsLoading(true);
 
-      onPrevCallback(upperBoundary - limit).then(() => {
-        // update boundaries to move indices - limit
-        setUpperBoundary(upperBoundary - limit);
-        setLowerBoundary(lowerBoundary - limit);
+    //   onPrevCallback(upperBoundary - limit).then(() => {
+    //     // update boundaries to move indices - limit
+    //     setUpperBoundary(upperBoundary - limit);
+    //     setLowerBoundary(lowerBoundary - limit);
 
-        // move scroll position to 1 limit height
-        if (overlayRef !== null) {
-          const scrollPos = limit * rowHeight;
-          overlayRef.current.scrollTo(0, scrollPos);
-        }
-        setIsLoading(false);
-      });
-    } else if (!isUp && scrollTop + clientHeight >= scrollHeight) {
+    //     // move scroll position to 1 limit height
+    //     if (overlayRef !== null) {
+    //       const scrollPos = limit * rowHeight;
+    //       overlayRef.current.scrollTo(0, scrollPos);
+    //     }
+    //     setIsLoading(false);
+    //   });
+    // } else
+    if (!isUp && scrollTop + clientHeight >= scrollHeight) {
       setIsLoading(true);
 
       onNextCallback(currentPage + 1);
@@ -74,7 +75,7 @@ const UiVirtualScroll = ({
   return (
     <div
       ref={overlayRef}
-      style={{ height, overflow: 'scroll' }}
+      style={{ height, overflowY: 'scroll' }}
       onScroll={(e) => handleScroll(e.target)}
     >
       {children}
