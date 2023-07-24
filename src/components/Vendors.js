@@ -8,6 +8,8 @@ import VendorCard from './VendorCard';
 const Vendors = () => {
   const dispatch = useDispatch();
   const offset = 0;
+  const limit = 30;
+  const cache = limit - 10;
 
   const [vendorsList, setVendorsList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -26,11 +28,16 @@ const Vendors = () => {
     setIsLoading(loading);
     if (theVendors && success) {
       if (isNextCall) {
+        const copyVendorsList =
+          vendorsList.length < 30
+            ? [...vendorsList]
+            : [...vendorsList.slice(-cache)];
         const newVendors = [
-          ...vendorsList,
+          ...copyVendorsList,
           theVendors.filter((vendor) => vendor.type === 'VENDOR'),
         ];
         setVendorsList(newVendors.flat());
+        setIsNextCall(false);
       } else {
         setVendorsList(theVendors.filter((vendor) => vendor.type === 'VENDOR'));
       }
@@ -64,7 +71,7 @@ const Vendors = () => {
       <UiVirtualScroll
         rowHeight={300}
         height="95vh"
-        limit={vendorsList.length}
+        limit={10}
         // onPrevCallback={prevCallback}
         onNextCallback={nextCallback}
       >
