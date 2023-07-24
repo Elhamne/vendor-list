@@ -8,12 +8,14 @@ import VendorCard from './VendorCard';
 const Vendors = () => {
   const dispatch = useDispatch();
   const offset = 0;
-  const limit = 30;
-  const cache = limit - 10;
+  const limit = 10;
+  const buffer = limit * 3;
+  const cache = buffer - limit;
 
   const [vendorsList, setVendorsList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isNextCall, setIsNextCall] = useState(false);
+  const [isPrevCall, setIsPrevCall] = useState(false);
 
   // Read vendors from redux state
   const vendors = useSelector((state) => state.vendors);
@@ -29,7 +31,7 @@ const Vendors = () => {
     if (theVendors && success) {
       if (isNextCall) {
         const copyVendorsList =
-          vendorsList.length < 30
+          vendorsList.length < buffer
             ? [...vendorsList]
             : [...vendorsList.slice(-cache)];
         const newVendors = [
@@ -38,6 +40,13 @@ const Vendors = () => {
         ];
         setVendorsList(newVendors.flat());
         setIsNextCall(false);
+      } else if (isPrevCall) {
+        const newVendors = [
+          theVendors.filter((vendor) => vendor.type === 'VENDOR'),
+          ...vendorsList.slice(0, cache),
+        ];
+        setVendorsList(newVendors.flat());
+        setIsPrevCall(false);
       } else {
         setVendorsList(theVendors.filter((vendor) => vendor.type === 'VENDOR'));
       }
@@ -46,7 +55,10 @@ const Vendors = () => {
     }
   }, [theVendors, loading, success, error]);
 
-  console.log(vendorsList);
+  const prevCallback = (newOffset) => {
+    dispatch(fetchVendors(newOffset));
+    setIsPrevCall(true);
+  };
 
   // Fetch next page vendors list
   const nextCallback = (newOffset) => {
@@ -71,8 +83,8 @@ const Vendors = () => {
       <UiVirtualScroll
         rowHeight={300}
         height="95vh"
-        limit={10}
-        // onPrevCallback={prevCallback}
+        limit={limit}
+        onPrevCallback={prevCallback}
         onNextCallback={nextCallback}
       >
         <div className="card-container">

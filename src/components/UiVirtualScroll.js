@@ -6,7 +6,7 @@ const UiVirtualScroll = ({
   limit,
   rowHeight,
   height,
-  // onPrevCallback,
+  onPrevCallback,
   onNextCallback,
   children,
 }) => {
@@ -19,6 +19,7 @@ const UiVirtualScroll = ({
   // initial lower boundary index is 300-1 = 299
   // const [lowerBoundary, setLowerBoundary] = useState(limit - 1);
   const [currentPage, setCurrentPage] = useState(offset);
+  const [lastChangePageIncrement, setLastChangePageIncrement] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   // current scroll position starting with 0
   const [currentScrollTopPosition, setCurrentScrollTopPosition] = useState(0);
@@ -39,33 +40,42 @@ const UiVirtualScroll = ({
     // defining if we currently scrolling up or down
     const isUp = scrollTop < currentScrollTopPosition;
 
-    // if (isUp && scrollTop === 0) {
-    //   setIsLoading(true);
-
-    //   onPrevCallback(upperBoundary - limit).then(() => {
-    //     // update boundaries to move indices - limit
-    //     setUpperBoundary(upperBoundary - limit);
-    //     setLowerBoundary(lowerBoundary - limit);
-
-    //     // move scroll position to 1 limit height
-    //     if (overlayRef !== null) {
-    //       const scrollPos = limit * rowHeight;
-    //       overlayRef.current.scrollTo(0, scrollPos);
-    //     }
-    //     setIsLoading(false);
-    //   });
-    // } else
-    if (!isUp && scrollTop + clientHeight >= scrollHeight) {
+    if (isUp && scrollTop === 0 && currentPage !== 0) {
       setIsLoading(true);
+      const updatePage = lastChangePageIncrement
+        ? currentPage - 3
+        : currentPage - 1;
 
-      onNextCallback(currentPage + 1);
-      setCurrentPage(currentPage + 1);
+      if (updatePage >= 0) {
+        onPrevCallback(updatePage);
+        // update current page
+        setCurrentPage(updatePage);
+
+        // move scroll position to 1 limit height
+        if (overlayRef !== null) {
+          const scrollPos = limit * rowHeight;
+          overlayRef.current.scrollTo(0, scrollPos);
+        }
+        setLastChangePageIncrement(false);
+      }
+
+      setIsLoading(false);
+    } else if (!isUp && scrollTop + clientHeight >= scrollHeight) {
+      setIsLoading(true);
+      const updatePage = lastChangePageIncrement
+        ? currentPage + 1
+        : currentPage + 3;
+
+      onNextCallback(updatePage);
+      // update current page
+      setCurrentPage(updatePage);
 
       if (overlayRef !== null) {
         const scrollPos = limit * rowHeight;
         // move scroll position to 2 limits height
         overlayRef.current.scrollTo(0, scrollPos * 2);
       }
+      setLastChangePageIncrement(true);
       setIsLoading(false);
     }
     // update the current cursor position
