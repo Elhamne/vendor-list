@@ -60,7 +60,7 @@ const Vendors = () => {
       <UiVirtualScroll
         rowHeight={300}
         height="95vh"
-        limit={10}
+        limit={vendorsList.length}
         // onPrevCallback={prevCallback}
         onNextCallback={nextCallback}
       >
