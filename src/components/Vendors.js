@@ -18,24 +18,24 @@ const Vendors = () => {
   const [isNextCall, setIsNextCall] = useState(false);
 
   const vendors = useSelector((state) => state.vendors);
-  const loading = useSelector((state) => state.loading);
-  const success = useSelector((state) => state.success);
+  const { theVendors, loading, success, error } = vendors;
 
   useEffect(() => {
     setIsLoading(loading);
-    if (vendors && success) {
+    if (theVendors && success) {
       if (isNextCall) {
         const newVendors = [
           ...vendorsList,
-          vendors.filter((vendor) => vendor.type === 'VENDOR'),
+          theVendors.filter((vendor) => vendor.type === 'VENDOR'),
         ];
         setVendorsList(newVendors.flat());
       } else {
-        setVendorsList(vendors.filter((vendor) => vendor.type === 'VENDOR'));
+        setVendorsList(theVendors.filter((vendor) => vendor.type === 'VENDOR'));
       }
+    } else if (error) {
+      console.error(error);
     }
-    console.log('effect call');
-  }, [vendors, loading, success]);
+  }, [theVendors, loading, success, error]);
 
   useEffect(() => {
     dispatch(fetchVendors(offset));

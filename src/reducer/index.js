@@ -5,7 +5,7 @@ export const vendorsReducer = (state = {}, action) => {
     case VENDORS_REQUEST:
       return { loading: true, success: false };
     case VENDORS_SUCCESS:
-      return { loading: false, success: true, vendors: action.payload };
+      return { loading: false, success: true, theVendors: action.payload };
     case VENDORS_FAIL:
       return { loading: false, success: false, error: action.payload };
     default:
