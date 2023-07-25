@@ -2,7 +2,6 @@ import React, { useRef, useState } from 'react';
 
 const UiVirtualScroll = ({
   offset = 0,
-  // buffer,
   limit,
   rowHeight,
   height,
@@ -13,11 +12,6 @@ const UiVirtualScroll = ({
   // create overlay reference to trigger the change scroll position
   const overlayRef = useRef(null);
 
-  // create two cursors of lower and upper boundary of cached items indices
-  // initial upper boundary index is 0
-  // const [upperBoundary, setUpperBoundary] = useState(offset);
-  // initial lower boundary index is 300-1 = 299
-  // const [lowerBoundary, setLowerBoundary] = useState(limit - 1);
   const [currentPage, setCurrentPage] = useState(offset);
   const [lastChangePageIncrement, setLastChangePageIncrement] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
